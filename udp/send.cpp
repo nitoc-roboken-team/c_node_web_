@@ -7,16 +7,26 @@
 // #include <arpa/inet.h>
 // #include <stdlib.h>
 #include "send.hpp"
+#include <errno.h>
+
 namespace c_node_web
 {
 
 Transmit::Transmit()
 {
-  
+    m_red = 'r';
+    m_blue = 'b';
+    m_green = 'g';
+    m_yellow = 'y';
+    m_eraser = 'e';
+    m_digit =0;
+    m_integer=0;
 }
 
 void Transmit::send(int color_id,int position)
 {
+
+    
     // Send send;
     char id='0'+position;
         
@@ -54,39 +64,32 @@ void Transmit::send(int color_id,int position)
 
 void Transmit::init(char ip[])
 {
-    SrcAddr.sin_family = AF_INET;
-    SrcAddr.sin_port = htons(12346);
-    SrcAddr.sin_addr.s_addr = inet_addr(ip);
+    // SrcAddr.sin_family = AF_INET;
+    // SrcAddr.sin_port = htons(12346);
+    // SrcAddr.sin_addr.s_addr = inet_addr(ip);
+
+    // if((socket(AF_INET, SOCK_DGRAM, 0)) < 0) 
+    // {
+    //     printf("map_viwerのsocket");
+    //     exit(2);
+    // }
 
     DstAddr.sin_family = AF_INET;
     DstAddr.sin_port = htons(12345);
     DstAddr.sin_addr.s_addr = inet_addr(ip);
+   
     //送り元
-    Srcsock = socket(AF_INET, SOCK_DGRAM, 0);
+    // Srcsock = socket(AF_INET, SOCK_DGRAM, 0);
     //送り先
     DstAddrsock = socket(AF_INET, SOCK_DGRAM, 0);
+    if(DstAddrsock < 0) 
+    {
+        perror("socket");
+        exit(2);
+    }
     char str[8] = "_______";
         // CSType_delay_ms(10);
-    sendto(DstAddrsock, "1eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "2eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "3eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "4eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "5eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "6eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "7eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "8eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "9eraser", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "1pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "2pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "3pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "4pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "5pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "6pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "7pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "8pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-    sendto(DstAddrsock, "9pink__", sizeof(str)-1, 0, (struct sockaddr *)&DstAddr, sizeof(DstAddr));
-
-
+  
 }
 
 void Transmit::rpm(int i_power,int num)

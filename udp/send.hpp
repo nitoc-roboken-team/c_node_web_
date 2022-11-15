@@ -1,6 +1,7 @@
-#ifndef udp_sendhpp
-#define udp_sendhpp
+#ifndef UDP_SENDHPP
+#define UDP_SENDHPP
 #include <stdio.h>
+#include <errno.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
@@ -22,13 +23,14 @@ private:
     struct sockaddr_in SrcAddr;
     int DstAddrsock;
     struct sockaddr_in DstAddr;
-    char m_red = 'r';
-    char m_blue = 'b';
-    char m_green = 'g';
-    char m_yellow = 'y';
-    char m_eraser = 'e';
-    int m_digit =0;
-    int m_integer=0;
+    char m_red;
+    char m_blue;
+    char m_green;
+    char m_yellow;
+    char m_eraser;
+    int m_digit;
+    int m_integer;
+    const void *i;
     // char cyan[7] = "cyan__";
     // char pink[7] = "pink__";
    
@@ -45,4 +47,4 @@ public:
 
 };
 }
-#endif /*udp_sendhpp*/
+#endif /*UDP_SENDHPP*/
