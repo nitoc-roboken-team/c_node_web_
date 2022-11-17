@@ -30,7 +30,7 @@ private:
     char m_eraser;
     int m_digit;
     int m_integer;
-    const void *i;
+    // int string[2]={a,b};
     // char cyan[7] = "cyan__";
     // char pink[7] = "pink__";
    

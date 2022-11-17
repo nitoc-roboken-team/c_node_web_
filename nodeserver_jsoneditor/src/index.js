@@ -1,8 +1,12 @@
+// "use strict";
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
+
 const server = http.Server(app);
 const io = socketIo(server);
 
@@ -42,10 +46,18 @@ socket_udp_from_web_to_node_c.bind(PORT_D, HOST_D);//nodejs側bind
 // app.get('/dist/img/jsoneditor-icons.svg', (req, res) => {
 //   res.sendFile(__dirname + '/dist/img/jsoneditor-icons.svg');
 // });
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
+  // console.log("okuttayo");
+
 });
+
+// app.get('/dist/img/color1.png', (req, res) => {
+//   res.sendFile(__dirname + '/dist/img/color1.png');
+//   console.log("okuttayo");
+// });
+
 
 //udp c -> node.js -> web
 socket_udp_from_c_to_nodejs_to_web.on('message', (message, remote) => {
@@ -58,12 +70,29 @@ server.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
 
-io.on('connection', (socket) => {
+io.on('connection', (socket) => 
+{
+  socket.on('getimage', reason => 
+  {
+    let imageFilePath = path.join(__dirname, 'public/img/sample1.jpg');
+    fs.readFile(imageFilePath, 'base64', (err, data) => 
+    {
+      if (err) 
+      {
+        console.log(err);
+        return;
+      }
+      const imgSrc = 'data:image/jpg;base64,' + data;
+      socket.emit('sendImage', { imgSrc });
+      console.log("sendimage");
+    });
+  });
   console.log('user connected');
-  socket.on('post_message', (data) => {
+  socket.on('post_message', (data) => 
+  {
     io.emit("send",data);
-
-    socket_udp_from_web_to_node_c.send(data, 0, data.length, PORT_C, HOST_C, (err, bytes) => {
+    socket_udp_from_web_to_node_c.send(data, 0, data.length, PORT_C, HOST_C, (err, bytes) => 
+    {
       if (err) throw err;
     });
   });
